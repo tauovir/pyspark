@@ -1,0 +1,1 @@
+spark-submit --master yarn --deploy-mode cluster --py-files sds_lip.zip --files conf/sds.conf,conf/sparkconf sds_main.py qa 2023-01-01
