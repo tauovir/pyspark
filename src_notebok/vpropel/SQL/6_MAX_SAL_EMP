@@ -1,0 +1,72 @@
+Employee table:
++----+-------+--------+--------------+
+| id | name  | salary | departmentId |
++----+-------+--------+--------------+
+| 1  | Joe   | 85000  | 1            |
+| 2  | Henry | 80000  | 2            |
+| 3  | Sam   | 60000  | 2            |
+| 4  | Max   | 90000  | 1            |
+| 5  | Janet | 69000  | 1            |
+| 6  | Randy | 85000  | 1            |
+| 7  | Will  | 70000  | 1            |
++----+-------+--------+--------------+
+
+Department table:
++----+-------+
+| id | name  |
++----+-------+
+| 1  | IT    |
+| 2  | Sales |
++----+-------+
+
+Output: 
++------------+----------+--------+
+| Department | Employee | Salary |
++------------+----------+--------+
+| IT         | Max      | 90000  |
+| IT         | Joe      | 85000  |
+| IT         | Randy    | 85000  |
+| Sales      | Henry    | 80000  |
+| Sales      | Sam      | 60000  |
++------------+----------+--------+
+
+Write a solution to find the employees who are earning highest and second highest in each of the departments.
+
+CREATE OR REPLACE TABLE EMPLOYEE 
+(
+ID  INTEGER,
+NAME VARCHAR(120),
+SALARY INTEGER,
+DEPARTMENTID INTEGER
+);
+
+CREATE TABLE DEPARTMENT(
+ID  INTEGER,
+NAME VARCHAR(10)
+);
+
+INSERT INTO EMPLOYEE( ID, NAME, SALARY,DEPARTMENTID)
+VALUES(1,'JOE',85000,1),
+(2,'Henry',80000,2),
+(3,'Sam',60000,2),
+(4,'Max',90000,1),
+(5,'Janet',69000,1),
+(6,'Randy',85000,1),
+(7,'Will',70000,1);
+
+INSERT INTO DEPARTMENT(ID, NAME)
+VALUES(1,'IT'),
+(2,'Sales');
+
+
+SELECT * FROM EMPLOYEE;
+SELECT * FROM DEPARTMENT;
+
+WITH JOINED_DATA AS (
+SELECT E.NAME AS EMPLOYEE,E.SALARY,D.NAME AS DEPARTMENT,
+DENSE_RANK() OVER( PARTITION BY E.DEPARTMENTID ORDER BY E.SALARY DESC) AS RNK
+FROM
+EMPLOYEE AS E INNER JOIN DEPARTMENT AS D ON E.DEPARTMENTID = D.ID
+)
+SELECT DEPARTMENT, EMPLOYEE, SALARY FROM JOINED_DATA
+WHERE RNK < 3

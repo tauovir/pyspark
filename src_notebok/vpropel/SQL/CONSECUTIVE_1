@@ -1,0 +1,39 @@
+CREATE or replace TABLE CONSECUTIVE_DATE
+(
+email_id STRING, 
+log_date string, 
+flag string
+);
+INSERT INTO CONSECUTIVE_DATE VALUES 
+(101,'03-01-2024','Y'),
+(101,'04-01-2024','N'),
+(101,'07-01-2024','Y'),
+(102,'01-01-2024','N'),
+(102,'02-01-2024','Y'),
+(102,'03-01-2024','Y'),
+(102,'04-01-2024','N'),
+(102,'05-01-2024','Y'),
+(102,'06-01-2024','Y'),
+(102,'07-01-2024','Y'),
+(103,'01-01-2024','N'),
+(103,'04-01-2024','N'),
+(103,'05-01-2024','Y'),
+(103,'06-01-2024','Y'),
+(103,'07-01-2024','N');
+
+
+WITH filter_data AS
+(
+SELECT email_id,DATE(log_date, 'dd-mm-YYYY') as log_date,flag FROM CONSECUTIVE_DATE WHERE flag = 'Y'
+),
+group_data AS (
+SELECT email_id,log_date,row_number() over(PARTITION BY email_id ORDER BY log_date) as RN,
+SUBSTR(log_date::STRING,9,2)::INT AS DAY_NUM,
+(DAY_NUM - RN) AS day_grp
+FROM filter_data
+),
+final_result AS (
+SELECT email_id,day_grp,min(log_date) AS min_start_date,max(log_date) AS max_start_date ,count(*) AS cnt 
+from group_data group by email_id,day_grp  having cnt > 1
+)
+SELECT * FROM final_result
