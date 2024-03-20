@@ -11,17 +11,43 @@ E	      99
 F	      98
 G	      97
 
+FETCH NTH SCORE DETAIL.
 1. output:
 Name  SCORE
 C       99
 D       99
 E       99 
 
+SHOW THE SCORE IN BELOW FORMATE
 2.Output
 Name     Score
 C,D,E      99
-
+A,B      100
 '''
+CREATE OR REPLACE TABLE SCORE_CARD (
+NAME STRING,
+SCORE INT
+);
+
+INSERT INTO SCORE_CARD(NAME, SCORE)
+	VALUES ('A',100),
+    ('B',100),
+    ('C',99),
+    ('D',99),
+    ('E',99),
+    ('F',98),
+    ('G',97);
+
+-- Simple SQL with variable in Snowflake
+SET nth=2;
+
+WITH SCORE_DATA AS (    
+SELECT NAME,SCORE, DENSE_RANK() OVER(ORDER BY SCORE DESC) AS RNK
+FROM SCORE
+) SELECT NAME,SCORE FROM SCORE_DATA WHERE RNK = $nth
+
+
+-- Make procedure to fetch dynamic nth records
 
 CREATE OR REPLACE PROCEDURE SCORE_PROC(NTH INTEGER)
 RETURNS TABLE( NAME VARCHAR, SCORE INTEGER)
