@@ -35,6 +35,10 @@ Output:
 +----------+---------+-----+
 
 
+/*
+Write a SQL query to find the highest grade with its corresponding course for each student.
+In case of a tie you should find the course with the smallest course_id. The output must be sorted by student_id
+*/
 
 WITH GRADE_DATE AS
 (
