@@ -23,3 +23,6 @@ select * from emp_lang
 
 -- select emp_id,full_name, listagg(Distinct lang,',')
 -- from emp_lang group by emp_id,full_name
+
+select emp_id,full_name, ARRAY_TO_STRING(array_agg(lang),',')
+from emp_lang group by emp_id,full_name
