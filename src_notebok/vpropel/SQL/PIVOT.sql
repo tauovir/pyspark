@@ -22,10 +22,35 @@ INSERT INTO PIVOTE101(empid, amount, month)
 
 select get_ddl('table','PIVOTE101');
 
-
+---USING PIVOT FUNCTION
 select * from PIVOTE101
 pivot(avg(amount) for MONHT1 in ('JAN','FEB','MAR')) as p (EMPID, JAN, FEB, MAR)
 order by empid;
+
+--- WITHOUT USING PIVOT FUNCTION
+
+with records as (
+SELECT EMPID,
+SUM(CASE WHEN MONHT1 = 'JAN' THEN AMOUNT END) AS JAN,
+SUM(CASE WHEN MONHT1 = 'FEB' THEN AMOUNT END) AS FEB,
+SUM(CASE WHEN MONHT1 = 'MAR' THEN AMOUNT END) AS MAR
+FROM pivote101
+GROUP BY EMPID,MONHT1
+),
+jan_data AS (
+select EMPID,JAN FROM records WHERE JAN IS NOT NULL
+),
+feb_data AS (
+select EMPID,FEB FROM records WHERE FEB IS NOT NULL
+),
+mar_data AS (
+select EMPID,MAR FROM records WHERE MAR IS NOT NULL
+)
+select j.EMPID,j.JAN, f.FEB,m.MAR
+from jan_data as j
+inner join feb_data as f on j.EMPID = f.EMPID
+inner join mar_data as m on f.EMPID = m.EMPID;
+
 
 
 -- select * from PIVOTE101
@@ -47,7 +72,18 @@ INSERT INTO UNPIVOTE(empid, dept, jan, feb, mar);
 (3, 'cars', 200, 400, 100);
 
 
-
+-- USING UNPIVOT FUNCTION
 select * from UNPIVOTE
 unpivot (sales for month in (jan, feb, mar))
 order by empid;
+
+-- WITHOUT USING UNPIVOTE FUNCTION
+SELECT EMPID,DEPT, 'JAN' AS MONTH,JAN AS SALES
+FROM UNPIVOTE
+UNION
+SELECT EMPID,DEPT, 'FEB' AS MONTH,FEB AS SALES
+FROM UNPIVOTE
+UNION
+SELECT EMPID,DEPT, 'MAR' AS MONTH,MAR AS SALES
+FROM UNPIVOTE;
+
