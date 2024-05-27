@@ -48,4 +48,13 @@ SELECT COUNT(case when COUNTRY='INDIA' then 1 else null end) count_india FROM EM
 SELECT sum(case when COUNTRY='INDIA' then budget else 0 end) count_india FROM EMPCASE;
 
 
+create table emp101 (name string);.
+insert into emp101(name)
+values(null),(null),('banana'),('orange');
 
+select * from emp101;
+
+--- Count function incluede null values
+select count(*) as cnt from emp101;
+--- COund null values
+select count(case when name is null then 1 end) as cnt from emp101;
