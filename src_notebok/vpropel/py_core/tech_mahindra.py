@@ -1,3 +1,4 @@
+"""
 / Write a program that will count the frequency of the words in the String.
  
 // Example: I think coding is fun.. fun Fun fun!
@@ -8,6 +9,8 @@
 // is - 1
 // fun - 3
 // Fun - 1
+
+"""
 
 def remove_special_char(word):
   special_char = ['.','!']
