@@ -30,6 +30,7 @@ class Matrix:
                 temp.append(self.mat[col_ind][row_ind])
             new_mat.append(temp)
         resp = [sum(row) for row in new_mat]
+        #x = [mat[j][i] for i in range(len(mat)) for j in range(len(mat[0]))]
         return resp
 
 
