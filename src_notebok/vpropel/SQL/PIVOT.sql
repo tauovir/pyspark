@@ -29,27 +29,11 @@ order by empid;
 
 --- WITHOUT USING PIVOT FUNCTION
 
-with records as (
-SELECT EMPID,
-SUM(CASE WHEN MONHT1 = 'JAN' THEN AMOUNT END) AS JAN,
-SUM(CASE WHEN MONHT1 = 'FEB' THEN AMOUNT END) AS FEB,
-SUM(CASE WHEN MONHT1 = 'MAR' THEN AMOUNT END) AS MAR
-FROM pivote101
-GROUP BY EMPID,MONHT1
-),
-jan_data AS (
-select EMPID,JAN FROM records WHERE JAN IS NOT NULL
-),
-feb_data AS (
-select EMPID,FEB FROM records WHERE FEB IS NOT NULL
-),
-mar_data AS (
-select EMPID,MAR FROM records WHERE MAR IS NOT NULL
-)
-select j.EMPID,j.JAN, f.FEB,m.MAR
-from jan_data as j
-inner join feb_data as f on j.EMPID = f.EMPID
-inner join mar_data as m on f.EMPID = m.EMPID;
+select EMPID,
+sum(case when MONTH2 = 'JAN' THEN amount END) AS JAN,
+sum(case when MONTH2 = 'FEB' THEN amount END) AS FEB,
+sum(case when MONTH2 = 'MAR' THEN amount END) AS MAR
+FROM PIVOTE101 GROUP BY EMPID;
 
 
 
