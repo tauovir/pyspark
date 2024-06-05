@@ -31,6 +31,7 @@ class Matrix:
             new_mat.append(temp)
         resp = [sum(row) for row in new_mat]
         #x = [mat[j][i] for i in range(len(mat)) for j in range(len(mat[0]))]
+        # transpose_in_row =  [[self.mat[j][i] for j in range(len(self.mat[0]))] for i in range(len(self.mat))]
         return resp
 
 
