@@ -1,3 +1,8 @@
+-- Given a table VPROPLE with columns id, FLAG, and log_date (in 'dd-mm-yyyy' format),
+-- identify consecutive periods (groups) for each id where FLAG is not 'N',
+-- such that each group contains more than one record.
+-- For each group, return the id, the group's start and end dates.
+
 CREATE OR REPLACE TABLE VPROPLE (
 	id integer,
 	log_date VARCHAR,
