@@ -7,7 +7,7 @@ create or replace TABLE PIVOTE101 (
 );
 
 INSERT INTO PIVOTE101(empid, amount, month)
-    (1, 10000, 'JAN'), 
+    VALUES(1, 10000, 'JAN'), 
     (1, 400, 'JAN'),
     (2, 4500, 'JAN'),
     (2, 35000, 'JAN'),
@@ -71,3 +71,14 @@ UNION
 SELECT EMPID,DEPT, 'MAR' AS MONTH,MAR AS SALES
 FROM UNPIVOTE;
 
+-- Using array  and explode
+with records as (
+select EMPID,DEPT,array('jan','feb','mar') as month,
+array(jan,feb,mar) as amount
+from UNPIVOTE
+)
+select EMPID,DEPT, dict.month, dict.amount
+from (
+select EMPID,DEPT, explode(arrays_zip(month,amount)) as dict from records
+)
+;
